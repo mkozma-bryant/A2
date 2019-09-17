@@ -1,0 +1,59 @@
+---
+title: "Assignment 2"
+author: "McKenzie Kozma"
+date: "9/16/2019"
+output: html_document
+---
+
+1 - 5
+
+```{r}
+getwd()
+library(readxl)
+library(tidyverse)
+
+c2015 <- read_xlsx("c2015.xlsx")
+class(c2015)
+dim(c2015)
+
+set.seed(2019)
+c2015_sample <- c2015[sample(nrow(c2015), 1000),]
+summary(c2015_sample)
+
+#year is a constant. this variable will be removed from the dataset. 
+c2015_sample$YEAR <- NULL
+```
+
+6 - 10
+```{r}
+
+colSums(is.na(c2015_sample))
+colSums(c2015_sample == "Unknown", na.rm = TRUE)
+
+c2015_sample$SEX[c2015_sample$SEX == "Unknown"] <- "Female"
+c2015_sample$AGE[c2015_sample$AGE == "Less than 1"] <- "0"
+c2015_sample$AGE <- as.numeric(c2015_sample$AGE)
+c2015_sample$AGE[is.na(c2015_sample$AGE)] <- mean(c2015_sample$AGE, na.rm = TRUE)
+
+c2015_sample$TRAV_SP <- as.numeric(str_remove(c2015_sample$TRAV_SP, "MPH"))
+c2015_sample2 <- c2015_sample[!(is.na(c2015_sample$TRAV_SP)), ]
+```
+
+
+11 - 15
+```{r}
+mean(c2015_sample2$TRAV_SP[c2015_sample2$INJ_SEV == "No Apparent Injury (O)"], na.rm = TRUE)
+mean(c2015_sample2$TRAV_SP[c2015_sample2$INJ_SEV != "No Apparent Injury (O)"], na.rm = TRUE)
+
+#those who have no apparent injury were traveling, on average, at a lower speed
+
+c2015_sample3 <- c2015_sample2[c2015_sample2$SEAT_POS == "Front Seat, Left Side", ]
+
+mean(c2015_sample3$TRAV_SP[c2015_sample3$SEX == "Female"], na.rm = TRUE)
+mean(c2015_sample3$TRAV_SP[c2015_sample3$SEX == "Male"], na.rm = TRUE)
+
+#males drive faster on average in comparison to females
+
+
+```
+
