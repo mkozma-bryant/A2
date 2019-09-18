@@ -2,7 +2,9 @@
 title: "Assignment 2"
 author: "McKenzie Kozma"
 date: "9/16/2019"
-output: html_document
+output: rmarkdown::github_document
+  #pdf_document: default
+  #html_document: default
 ---
 
 1 - 5
@@ -49,11 +51,16 @@ mean(c2015_sample2$TRAV_SP[c2015_sample2$INJ_SEV != "No Apparent Injury (O)"], n
 
 c2015_sample3 <- c2015_sample2[c2015_sample2$SEAT_POS == "Front Seat, Left Side", ]
 
-mean(c2015_sample3$TRAV_SP[c2015_sample3$SEX == "Female"], na.rm = TRUE)
-mean(c2015_sample3$TRAV_SP[c2015_sample3$SEX == "Male"], na.rm = TRUE)
-
+by(c2015_sample3$TRAV_SP, c2015_sample3$SEX, FUN = mean)
 #males drive faster on average in comparison to females
 
+by(c2015_sample3$TRAV_SP, c2015_sample3$DRINKING, FUN = mean)
+#those who were drinking were driving faster, on average, than those who were not drinking
+
+
+#i hypothesized that those under the age of 25 would drive faster/more aggressively
+by(c2015_sample3$TRAV_SP, c2015_sample3$AGE < 25, FUN = mean)
+#my hypothesis appears to be true, those who were under the age of 25 were driving faster on average
 
 ```
 
